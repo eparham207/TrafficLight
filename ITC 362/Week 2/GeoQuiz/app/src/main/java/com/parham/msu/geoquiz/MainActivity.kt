@@ -35,22 +35,10 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.trueButton.setOnClickListener{
-            val snackBar = Snackbar.make(
-                it,
-                "Correct",
-                Snackbar.LENGTH_LONG
-            )
-            snackBar.show()
+           checkAnswer(true)
         }
         binding.FalseButton.setOnClickListener{
-            val snackBar = Snackbar.make(
-                it,
-                "Incorrect",
-                Snackbar.LENGTH_LONG
-            )
-            snackBar.setTextColor(Color.BLACK)
-            snackBar.setBackgroundTint(Color.RED)
-            snackBar.show()
+            checkAnswer(false)
         }
 
         binding.nextButton.setOnClickListener{
@@ -63,5 +51,17 @@ class MainActivity : AppCompatActivity() {
     private fun updateQuestion() {
         val questiontextResId = questionBank[currentIndex].textResId
         binding.questionTextview.setText(questiontextResId)
+    }
+    private fun checkAnswer(userAnswer:Boolean) {
+        val correctAnswer = questionBank[currentIndex].answer
+
+        val messageResId = if (userAnswer == correctAnswer){
+            R.string.correct_toast
+        } else {
+            R.string.incorrect_toast
+        }
+
+        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
+            .show()
     }
 }
