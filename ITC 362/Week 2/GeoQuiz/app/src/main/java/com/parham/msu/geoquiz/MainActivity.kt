@@ -7,36 +7,34 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
+import com.parham.msu.geoquiz.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var trueButton : Button
-    private lateinit var falseButton : Button
+    private lateinit var binding:ActivityMainBinding
+    //private lateinit var trueButton : Button
+    //private lateinit var falseButton : Button
+
+    private val questionBank = listOf(
+        Question(R.string.question_australia, answer = true),
+        Question(R.string.question_ocean, answer = true),
+        Question(R.string.question_mideast, answer = false),
+        Question(R.string.question_Africa, answer = false),
+        Question(R.string.question_americas, answer = true),
+        Question(R.string.question_asia, answer = true)
+    )
+    private var currentIndex = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        //setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-       trueButton = findViewById(R.id.true_button)
-            falseButton = findViewById(R.id.False_button)
+       //trueButton = findViewById(R.id.true_button)
+            //falseButton = findViewById(R.id.False_button)
 
-            /*trueButton.setOnClickListener{view: View ->
-                Toast.makeText(
-                    this,
-                    R.string.true_button,
-                    Toast.LENGTH_SHORT)
-                    .show()
 
-        }
-        falseButton.setOnClickListener{view: View ->
-            Toast.makeText(
-                this,
-                R.string.false_button,
-                Toast.LENGTH_SHORT)
-                .show()
-
-        }*/
-
-        trueButton.setOnClickListener{
+        binding.trueButton.setOnClickListener{
             val snackBar = Snackbar.make(
                 it,
                 "Correct",
@@ -44,7 +42,7 @@ class MainActivity : AppCompatActivity() {
             )
             snackBar.show()
         }
-        falseButton.setOnClickListener{
+        binding.FalseButton.setOnClickListener{
             val snackBar = Snackbar.make(
                 it,
                 "Incorrect",
@@ -54,5 +52,16 @@ class MainActivity : AppCompatActivity() {
             snackBar.setBackgroundTint(Color.RED)
             snackBar.show()
         }
+
+        binding.nextButton.setOnClickListener{
+            currentIndex = (currentIndex + 1) % questionBank.size
+            updateQuestion()
+        }
+
+        updateQuestion()
+    }
+    private fun updateQuestion() {
+        val questiontextResId = questionBank[currentIndex].textResId
+        binding.questionTextview.setText(questiontextResId)
     }
 }
